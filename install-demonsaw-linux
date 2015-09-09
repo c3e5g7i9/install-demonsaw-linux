@@ -21,9 +21,12 @@
 ####  Before installing:    
 ####  ------------------
 ####	
-####	!) Make sure to apply "chmod +x install-demonsaw-linux" to the script before running.
 ####
-####	!) If you get any permission errors, trying running script as sudo.
+####   !!!) IMPORTANT: Save this script as "install-demonsaw-linux" (without quotes).
+####    
+####    !!)  Make sure to apply "chmod +x install-demonsaw-linux" to the script before running.
+####
+####     !)  If you get any permission errors, trying running script as sudo.
 ####
 ####
 ####
