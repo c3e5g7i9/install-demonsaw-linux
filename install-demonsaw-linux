@@ -1,0 +1,264 @@
+#!/bin/bash
+
+
+#
+##
+####
+####
+####                              This is a bash script for installing Demonsaw Linux v2.02. 
+#### 
+####
+####       As of 9/08/2015, it is confirmed to work on both the x86_64 (64-bit) and i686 (32-bit) versions of the following Linux distros:
+####
+####            
+####                |  Kali Linux 2.0  |  Ubuntu 14.04.3 LTS  |  Linux Mint 17.2 Rafaela  |   Elementary OS Freya 0.3.1  |
+####
+####	
+####
+####	
+####
+####
+####  Before installing:    
+####  ------------------
+####	
+####	!) Make sure to apply "chmod +x install-demonsaw-linux" to the script before running.
+####
+####	!) If you get any permission errors, trying running script as sudo.
+####
+####
+####
+####
+####  After installing:
+####  -----------------
+####	
+####	) Demonsaw will automatically start after installation.  
+####	   To re-launch at any time, navigate to the 
+####	   install directory and run "sudo ./demonsaw"
+####
+####	) Visit https://demonsaw.com/ and see the downloaded ~/demonsaw/README.TXT file for more information.
+####		
+####	) Look in https://www.reddit.com/r/demonsaw for extra stuff.
+####
+####	) For a quickstart, after Demonsaw launches, click the "+" button in the top left corner to add a new Client.  
+####	   In the newly created "Client" window, replace the default IP
+####	   "127.0.0.1" in the Address box with, "bucket1.demonbucket.com" 
+####	   (add the address without the quotes and no extra spaces on either side)
+####       Check the Enable box and wait for the client icon illuminate green.
+####
+##
+#
+
+
+echo
+echo
+echo
+
+
+mkdir -p ~/demonsaw
+cp -f install-demonsaw-linux ~/demonsaw/install-demonsaw-linux
+cd ~/demonsaw
+
+echo
+echo
+echo
+
+sleep 1
+
+echo "Downloading files securely from demonsaw.com"
+
+echo
+echo
+echo
+
+
+#### Checks architecture and downloads appropriate .zip file from demonsaw.com.
+###
+##
+#
+#
+if [[ $(uname -m) == 'x86_64' ]]; then
+    echo "Downloading 64 Bit Version"
+    echo "--------------------------"
+    echo
+    wget -N --https-only https://www.demonsaw.com/download/v2-02/demonsaw_linux64.zip
+else
+    echo "Downloading 32 Bit Version"
+    echo "--------------------------"
+    echo
+    wget -N --https-only https://www.demonsaw.com/download/v2-02/demonsaw_linux32.zip
+fi
+
+
+
+sleep 1
+
+
+
+####  Creates a sha1sum hash file as listed at https://demonsaw.com/download.php
+###
+##
+#
+#
+if [[ $(uname -m) == 'x86_64' ]]; then
+    echo "c4171d3e3307701e96d768236ab8e1afc58ef8b7  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
+else
+    echo "720737CBF665A510F7C786C43DC35150CE5411E9  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
+fi
+
+
+
+echo
+echo "--------------------------"
+echo
+
+echo "Verifying SHA-1 hash with sha1sum..."
+
+echo
+echo
+echo
+
+
+####  Confirmation of SHA-1 hash based on architecture being printed to screen.
+###
+##
+#
+#
+if [[ $(uname -m) == 'x86_64' ]]; then
+    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.02) is: c4171d3e3307701e96d768236ab8e1afc58ef8b7"
+else
+    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.02) is: 720737CBF665A510F7C786C43DC35150CE5411E9"
+fi
+
+
+echo
+echo
+echo
+
+sleep 3
+
+
+####  Runs sha1sum to compare the hashes of the downloaded zip files to the SHA-1 hashes listed at https://demonsaw.com/download.php
+###
+##
+#
+#
+if [[ $(uname -m) == 'x86_64' ]]; then
+    sha1sum --check --strict demonsaw_linux64.zip.sha1
+else
+    sha1sum --check --strict demonsaw_linux32.zip.sha1
+fi
+
+
+
+####  Confirms the results of sha1sum, and prints to screen.
+###
+##
+#
+#
+if [ $? -eq 0 ]; then
+    echo
+    echo
+    echo
+    echo "The hash is valid.  To further verify, visit https://demonsaw.com/download.php."
+    echo
+else
+    echo
+    echo
+    echo
+    echo "WARNING: The hash appears to be INVALID, please cancel installation and verify at https://demonsaw.com/download.php"
+    echo
+    echo
+    echo
+    exit
+fi
+
+sleep 3
+
+echo
+echo "--------------------------"
+echo "Enter password in install."
+echo "--------------------------"
+echo
+
+
+
+####  Installs the required libxcb packages to launch Demonsaw in the X Window System.
+###
+##
+#
+#
+sudo apt-get update -y && sudo apt-get install -y libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-randr0 libxcb-keysyms1 && sudo apt-get autoclean
+
+
+echo
+echo
+echo
+
+
+####  Creates a symbolic link between newer and older library files for redundancy.
+###
+##
+#
+#
+if [[ $(uname -m) == 'x86_64' ]]; then
+	sudo ln -f -s /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1 /usr/lib/libxcb-sync.so.0
+	unzip demonsaw_linux64.zip
+else
+	sudo ln -f -s /usr/lib/i386-linux-gnu/libxcb-sync.so.1 /usr/lib/libxcb-sync.so.0
+	unzip demonsaw_linux32.zip
+fi
+
+
+echo
+echo
+echo
+
+
+####  Checks to see if the Demonsaw program file was created, adds execute privileges, and prints confirmation to screen.
+###
+##
+#
+#
+exists=./demonsaw
+if [ -f $exists ]; then
+    chmod +x demonsaw
+    echo "The installation was successful."
+else
+    echo
+    echo
+    echo
+    echo "Installation failed."
+    echo
+    echo
+    echo 
+    exit
+fi
+
+
+
+echo 
+echo
+echo
+
+
+####  Prints the post installation notes found at the top of this script.
+###
+##
+#
+#
+sed -n '27,49p' install-demonsaw-linux | grep --color=always -B 5 -A 18 "After installing:"
+
+echo 
+echo
+echo
+
+####  Launches demonsaw.
+###
+##
+#
+#
+sudo ./demonsaw
+
+echo
+echo
+echo
