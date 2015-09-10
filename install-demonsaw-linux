@@ -206,11 +206,11 @@ echo
 if [[ $(uname -m) == 'x86_64' ]]; then    
     sudo ln -f -s /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1 /usr/lib/x86_64-linux-gnu/libxcb-sync.so.0
     sudo ln -f -s /lib/x86_64-linux-gnu/libudev.so.1 /usr/lib/x86_64-linux-gnu/libudev.so.0	
-    unzip demonsaw_linux64.zip
+    unzip -o demonsaw_linux64.zip
 else
     sudo ln -f -s /usr/lib/i386-linux-gnu/libxcb-sync.so.1 /usr/lib/i386-linux-gnu/libxcb-sync.so.0
     sudo ln -f -s /lib/i386-linux-gnu/libudev.so.1 /usr/lib/i386-linux-gnu/libudev.so.0
-	unzip demonsaw_linux32.zip
+    unzip -o demonsaw_linux32.zip
 fi
 
 
