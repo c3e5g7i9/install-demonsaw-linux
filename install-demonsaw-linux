@@ -5,7 +5,7 @@
 ##
 ####
 ####
-####                              This is a bash script for installing Demonsaw Linux v2.02. 
+####                              This is a bash script for installing Demonsaw Linux v2.03. 
 #### 
 ####
 ####       As of 9/08/2015, it is confirmed to work on both the x86_64 (64-bit) and i686 (32-bit) versions of the following Linux distros:
@@ -42,11 +42,6 @@
 ####		
 ####	) Look in https://www.reddit.com/r/demonsaw for extra stuff.
 ####
-####	) For a quickstart, after Demonsaw launches, click the "+" button in the top left corner to add a new Client.  
-####	   In the newly created "Client" window, replace the default IP
-####	   "127.0.0.1" in the Address box with, "bucket1.demonbucket.com" 
-####	   (add the address without the quotes and no extra spaces on either side)
-####       Check the Enable box and wait for the client icon illuminate green.
 ####
 ##
 #
@@ -83,12 +78,12 @@ if [[ $(uname -m) == 'x86_64' ]]; then
     echo "Downloading 64 Bit Version"
     echo "--------------------------"
     echo
-    wget -N --https-only https://www.demonsaw.com/download/v2-02/demonsaw_linux64.zip
+    wget -N --https-only https://www.demonsaw.com/download/v2-03/demonsaw_linux64.zip
 else
     echo "Downloading 32 Bit Version"
     echo "--------------------------"
     echo
-    wget -N --https-only https://www.demonsaw.com/download/v2-02/demonsaw_linux32.zip
+    wget -N --https-only https://www.demonsaw.com/download/v2-03/demonsaw_linux32.zip
 fi
 
 
@@ -103,9 +98,9 @@ sleep 1
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "c4171d3e3307701e96d768236ab8e1afc58ef8b7  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
+    echo "c94c3948989134ff051d5917b0bd4677919fbfeb  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
 else
-    echo "720737CBF665A510F7C786C43DC35150CE5411E9  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
+    echo "72c4c330345173f15582f5a4d8b10599446d79c1  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
 fi
 
 
@@ -127,9 +122,9 @@ echo
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.02) is: c4171d3e3307701e96d768236ab8e1afc58ef8b7"
+    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.03) is: c94c3948989134ff051d5917b0bd4677919fbfeb"
 else
-    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.02) is: 720737CBF665A510F7C786C43DC35150CE5411E9"
+    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.03) is: 72c4c330345173f15582f5a4d8b10599446d79c1"
 fi
 
 
@@ -190,8 +185,13 @@ echo
 ##
 #
 #
-sudo apt-get update -y && sudo apt-get install -y libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-randr0 libxcb-keysyms1 && sudo apt-get autoclean
-
+sudo apt-get update -y
+sudo apt-get install -y mesa-common-dev libcr-dev libglu1-mesa-dev -y
+sudo apt-get install -y libxcb1 libxcb1-dev libx11-xcb1 libx11-xcb-dev libxcb-keysyms1 libxcb-keysyms1-dev 
+sudo apt-get install -y libxcb-image0 libxcb-image0-dev libxcb-shm0 libxcb-shm0-dev libxcb-icccm4 libxcb-icccm4-dev
+sudo apt-get install -y libxcb-sync1 libxcb-sync0-dev libxcb-render-util0 libxcb-render-util0-dev libxcb-xfixes0-dev
+sudo apt-get install -y libxrender-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-glx0-dev
+sudo apt-get autoclean -y
 
 echo
 echo
@@ -203,11 +203,13 @@ echo
 ##
 #
 #
-if [[ $(uname -m) == 'x86_64' ]]; then
-	sudo ln -f -s /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1 /usr/lib/libxcb-sync.so.0
-	unzip demonsaw_linux64.zip
+if [[ $(uname -m) == 'x86_64' ]]; then    
+    sudo ln -f -s /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1 /usr/lib/x86_64-linux-gnu/libxcb-sync.so.0
+    sudo ln -f -s /lib/x86_64-linux-gnu/libudev.so.1 /usr/lib/x86_64-linux-gnu/libudev.so.0	
+    unzip demonsaw_linux64.zip
 else
-	sudo ln -f -s /usr/lib/i386-linux-gnu/libxcb-sync.so.1 /usr/lib/libxcb-sync.so.0
+    sudo ln -f -s /usr/lib/i386-linux-gnu/libxcb-sync.so.1 /usr/lib/i386-linux-gnu/libxcb-sync.so.0
+    sudo ln -f -s /lib/i386-linux-gnu/libudev.so.1 /usr/lib/i386-linux-gnu/libudev.so.0
 	unzip demonsaw_linux32.zip
 fi
 
@@ -249,7 +251,7 @@ echo
 ##
 #
 #
-sed -n '27,49p' install-demonsaw-linux | grep --color=always -B 5 -A 18 "After installing:"
+
 
 echo 
 echo
@@ -265,3 +267,6 @@ sudo ./demonsaw
 echo
 echo
 echo
+####
+##
+#
