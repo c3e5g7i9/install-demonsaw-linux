@@ -98,9 +98,9 @@ sleep 1
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "c94c3948989134ff051d5917b0bd4677919fbfeb  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
+    echo "ed71f41947a6deb14ac33581539ddabc23dd43f8  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
 else
-    echo "72c4c330345173f15582f5a4d8b10599446d79c1  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
+    echo "8160047b0e157169494128176630807e73e7019a  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
 fi
 
 
@@ -122,9 +122,9 @@ echo
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.03) is: c94c3948989134ff051d5917b0bd4677919fbfeb"
+    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.03) is: ed71f41947a6deb14ac33581539ddabc23dd43f8"
 else
-    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.03) is: 72c4c330345173f15582f5a4d8b10599446d79c1"
+    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.03) is: 8160047b0e157169494128176630807e73e7019a"
 fi
 
 
