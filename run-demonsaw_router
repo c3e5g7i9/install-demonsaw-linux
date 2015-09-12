@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+##
+####
+####
+#### This is a script to start demonsaw_router as a child process, monitor it, and restart it after a crash.
+####
+#### The script works by monitoring the exit code when demonsaw_router closes.
+#### If it crashed/exited ungracefully (i.e. anything with a non-zero exit code), it will auto-restart.
+#### If it closed as expected, it will remain off.  Using "ctrl+c" works nicely.		
+####
+####  1) Copy/paste (or download) and save as "run-demonsaw_router" and place it in the same directory as demonsaw_router. 
+####  2) Run "chmod +x" on both demonsaw_router and the run-demonsaw_router script.
+####  3) Open terminal, change to same directory, and enter "./run-demonsaw_router" to launch demonsaw_router.
+####  
+####
+####
+####
+###
+##
+#
+
+until ./demonsaw_router; do
+    echo "'demonsaw_router' crashed with exit code $?.  Respawning..." >&2
+    sleep 1
+done
+
+#
+##
+####
+####
+####
+####
+####
+###
+##
+#
