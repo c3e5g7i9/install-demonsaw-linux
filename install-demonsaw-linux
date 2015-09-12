@@ -79,7 +79,6 @@ if [[ $(uname -m) == 'x86_64' ]]; then
     echo "--------------------------"
     echo
     DL=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d'"' -f2 -s)
-    curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d'"' -f2 -s
     wget -N --https-only $DL
 else
     echo "Downloading 32 Bit Version"
