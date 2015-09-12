@@ -5,7 +5,7 @@
 ##
 ####
 ####
-####                              This is a bash script for installing Demonsaw Linux v2.03. 
+####                              This is a bash script for installing Demonsaw Linux 
 #### 
 ####
 ####       As of 9/08/2015, it is confirmed to work on both the x86_64 (64-bit) and i686 (32-bit) versions of the following Linux distros:
@@ -78,29 +78,43 @@ if [[ $(uname -m) == 'x86_64' ]]; then
     echo "Downloading 64 Bit Version"
     echo "--------------------------"
     echo
-    wget -N --https-only https://www.demonsaw.com/download/v2-03/demonsaw_linux64.zip
+    DL=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d'"' -f2 -s)
+    curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d'"' -f2 -s
+    wget -N --https-only $DL
 else
     echo "Downloading 32 Bit Version"
     echo "--------------------------"
     echo
-    wget -N --https-only https://www.demonsaw.com/download/v2-03/demonsaw_linux32.zip
+    DL=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux32.zip | cut -d'"' -f2 -s)
+    wget -N --https-only $DL
 fi
 
+####  Checks to make sure the DL worked.
+###
+##
+#
+#
+if [ $? -eq 0 ]; then
+    DL=PASS
+else
+    DL=FAIL
+fi
 
 
 sleep 1
 
 
-
-####  Creates a sha1sum hash file as listed at https://demonsaw.com/download.php
+####  Creates a sha1sum formatted hash-check file as listed at https://demonsaw.com/download.php
 ###
 ##
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "ed71f41947a6deb14ac33581539ddabc23dd43f8  demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
+    SHA1=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d" " -f2 -s | cut -d"<" -f-1 | sed -n '2p')
+    echo $SHA1 "demonsaw_linux64.zip" > demonsaw_linux64.zip.sha1
 else
-    echo "8160047b0e157169494128176630807e73e7019a  demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
+    SHA1=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux32.zip | cut -d" " -f2 -s | cut -d"<" -f-1 | sed -n '2p')
+    echo $SHA1 "demonsaw_linux32.zip" > demonsaw_linux32.zip.sha1
 fi
 
 
@@ -122,9 +136,9 @@ echo
 #
 #
 if [[ $(uname -m) == 'x86_64' ]]; then
-    echo "The SHA-1 hash for demonsaw_linux64.zip (v2.03) is: ed71f41947a6deb14ac33581539ddabc23dd43f8"
+    echo "SHA-1= $SHA1"
 else
-    echo "The SHA-1 hash for demonsaw_linux32.zip (v2.03) is: 8160047b0e157169494128176630807e73e7019a"
+    echo "SHA-1= $SHA1"
 fi
 
 
@@ -154,12 +168,14 @@ fi
 #
 #
 if [ $? -eq 0 ]; then
+    SHA1=PASS
     echo
     echo
     echo
     echo "The hash is valid.  To further verify, visit https://demonsaw.com/download.php."
     echo
 else
+    SHA1=FAIL
     echo
     echo
     echo
@@ -219,22 +235,19 @@ echo
 echo
 
 
-####  Checks to see if the Demonsaw program file was created, adds execute privileges, and prints confirmation to screen.
+####  Checks to see if if the .zips downloaded, passed sha1sum, and unzipped,
+####  adds execute privileges, and prints confirmation to screen.
 ###
 ##
 #
 #
 exists=./demonsaw
-if [ -f $exists ]; then
+if [ -f $exists ] && [ $DL = "PASS" ] && [ $SHA1 = "PASS" ]; then
     chmod +x demonsaw
     echo "The installation was successful."
 else
-    echo
-    echo
-    echo
+    echo 
     echo "Installation failed."
-    echo
-    echo
     echo 
     exit
 fi
@@ -244,15 +257,6 @@ fi
 echo 
 echo
 echo
-
-
-####  Prints the post installation notes found at the top of this script.
-###
-##
-#
-#
-
-
 echo 
 echo
 echo
