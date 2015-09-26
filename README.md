@@ -1,6 +1,6 @@
 # install-demonsaw-linux
 
-This is a bash script for installing Demonsaw Linux v2.03.
+This is a bash script for installing Demonsaw Linux.
 
  As of 9/08/2015, it is confirmed to work on both  the x86_64 (64-bit) and i686 (32-bit) versions of the following Linux distros:
 
