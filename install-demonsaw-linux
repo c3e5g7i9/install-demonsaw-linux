@@ -52,6 +52,42 @@ echo
 echo
 
 
+
+
+#### Looks for a previously isntalled Demonsaw folder and configuration file in the home folder.  
+###
+##
+#
+#
+
+test -e ~/demonsaw/demonsaw.xml
+
+if [ $? -eq 0 ]; then
+    mv ~/demonsaw/demonsaw.xml ~/existing_demonsaw.xml
+    echo "Demonsaw is already installed, making sure it's updated to most recent version now..." 
+else
+    echo "Existing Demonsaw install not detected, retrieving most recent version now..."
+fi
+
+echo
+echo
+echo
+
+
+if [[ $(uname -m) == 'x86_64' ]]; then
+    echo "Downloading 64 Bit Version"
+    echo "--------------------------"
+    echo
+    DL=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux64.zip | cut -d'"' -f2 -s)
+    wget -N --https-only $DL
+else
+    echo "Downloading 32 Bit Version"
+    echo "--------------------------"
+    echo
+    DL=$(curl -v --silent https://demonsaw.com/download.php 2>&1 | grep -m1 -A2 demonsaw_linux32.zip | cut -d'"' -f2 -s)
+    wget -N --https-only $DL
+fi
+
 mkdir -p ~/demonsaw
 cp -f install-demonsaw-linux ~/demonsaw/install-demonsaw-linux
 cd ~/demonsaw
@@ -189,7 +225,7 @@ sleep 3
 
 echo
 echo "--------------------------"
-echo "Enter password in install."
+echo "Enter password to install."
 echo "--------------------------"
 echo
 
@@ -243,10 +279,11 @@ echo
 exists=./demonsaw
 if [ -f $exists ] && [ $DL = "PASS" ] && [ $SHA1 = "PASS" ]; then
     chmod +x demonsaw
-    echo "The installation was successful."
+    echo "Looks like the installation was successful."
+    mv -f ~/existing_demonsaw.xml ~/demonsaw/demonsaw.xml 
 else
     echo 
-    echo "Installation failed."
+    echo "Something went wrong."
     echo 
     exit
 fi
